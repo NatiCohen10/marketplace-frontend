@@ -38,8 +38,9 @@ function ProductDetailsPage() {
   async function editTitle() {
     const newProductTitle = newTitleRef.current.value;
     try {
-      const newProduct = { ...product, name: newProductTitle };
-      await axios.put(ProductUrl, newProduct);
+      await axios.patch(ProductUrl + "/" + productId, {
+        name: newProductTitle,
+      });
       setProduct((prev) => {
         return { ...prev, name: newTitleRef.current.value };
       });
@@ -63,7 +64,12 @@ function ProductDetailsPage() {
 
   return (
     <>
-      <button onClick={handleBack}>back</button>
+      <button
+        className="border-2 border-rose-800 w-32 rounded-lg mt-4"
+        onClick={handleBack}
+      >
+        back
+      </button>
       <div>
         {isEdit ? (
           <div>
@@ -74,18 +80,31 @@ function ProductDetailsPage() {
               value={editedTitle}
               onChange={(ev) => setEditedTitle(ev.target.value)}
             />
-            <button onClick={editTitle}>save changes</button>
+            <button
+              className="border-2 border-rose-800 w-32 rounded-lg mt-4"
+              onClick={editTitle}
+            >
+              save changes
+            </button>
           </div>
         ) : (
           <div>
             <h1>{product.name}</h1>
-            <button onClick={toggleIsEdit}>edit title</button>
+            <button
+              className="border-2 border-rose-800 w-32 rounded-lg mt-4"
+              onClick={toggleIsEdit}
+            >
+              edit title
+            </button>
           </div>
         )}
 
-        <p>{product.price}</p>
+        <p>{product.price}$</p>
         <p>{product.category}</p>
-        <button onClick={() => handleDeleteProduct(product._id)}>
+        <button
+          className="border-2 border-rose-800 w-32 rounded-lg mt-4"
+          onClick={() => handleDeleteProduct(product._id)}
+        >
           delete product
         </button>
       </div>

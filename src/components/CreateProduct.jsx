@@ -27,7 +27,8 @@ function CreateProduct() {
       category: newProductCategoryRef.current.value,
     };
     try {
-      await axios.post(productUrl, newProduct);
+      const response = await axios.post(productUrl, newProduct);
+      console.log(response);
       newProductTitleRef.current.value = "";
       newProductPriceRef.current.value = "";
       newProductCategoryRef.current.value = "";
@@ -38,7 +39,8 @@ function CreateProduct() {
 
   return (
     <>
-      <form className=" flex flex-col" onSubmit={handleFormSubmit}>
+      <h2 className=" text-3xl font-bold">Create a new product</h2>
+      <form className=" flex flex-col mb-7" onSubmit={handleFormSubmit}>
         <label htmlFor="newProductName">product name</label>
         <input
           className=" border-2 border-black"
@@ -63,7 +65,12 @@ function CreateProduct() {
           ref={newProductCategoryRef}
           required
         />
-        <button type="submit">submit</button>
+        <button
+          className=" border-2 border-rose-800 w-32 rounded-lg mt-4"
+          type="submit"
+        >
+          submit
+        </button>
       </form>
     </>
   );
