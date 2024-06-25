@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import ProductItem from "./ProductItem";
 import FilterProducts from "./FilterProducts";
 import CreateProduct from "./CreateProduct";
@@ -12,26 +12,30 @@ function ProductsList() {
   const [pagination, setPagination] = useState({
     totalItems: 0,
     totalPages: 1,
-    currentPage: 1,
   });
+  const [loading, setLoading] = useState(false);
 
-  const [searchParams, setSearchParams] = useSearchParams({
-    name: "",
-    minPrice: "",
-    maxPrice: "",
-    isInStock: "",
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const location = useLocation();
   const name = searchParams.get("name");
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
   const isInStock = searchParams.get("isInStock");
+  const page = parseInt(searchParams.get("page")) || 1;
 
   useEffect(() => {
     const abortController = new AbortController();
+
+    if (page < 1) {
+      searchParams.set("page", "1");
+      setSearchParams(searchParams);
+      return;
+    }
+
     async function fetchProducts() {
       try {
+        setLoading(true);
         const response = await axios.get(PRODUCTS_URL + location.search, {
           signal: abortController.signal,
         });
@@ -39,17 +43,28 @@ function ProductsList() {
           PRODUCTS_URL + "/count" + location.search,
           { signal: abortController.signal }
         );
-        const { limit, products, currentPage } = response.data;
+        const { limit, products } = response.data;
         const { count } = productCount.data;
         const totalPages = Math.ceil(count / limit);
+
+        if (page > totalPages) {
+          setSearchParams((prev) => {
+            prev.set("page", totalPages.toString());
+            return prev;
+          });
+          return;
+        }
+
         setProducts(products);
-        setPagination({ totalItems: count, totalPages, currentPage });
+        setPagination({ totalItems: count, totalPages });
       } catch (error) {
         if (axios.isCancel(error)) {
           console.log("Request canceled:", error.message);
         } else {
           console.error(error);
         }
+      } finally {
+        setLoading(false);
       }
     }
     fetchProducts();
@@ -60,10 +75,29 @@ function ProductsList() {
   }, [location.search]);
 
   function handlePageChange(newPage) {
+    if (newPage < 1 || newPage > pagination.totalPages) return;
     setSearchParams((prev) => {
       prev.set("page", newPage);
       return prev;
     });
+  }
+
+  function renderPageNumbers() {
+    const pageNumbers = [];
+    for (let i = 1; i <= pagination.totalPages; i++) {
+      pageNumbers.push(
+        <Link
+          key={i}
+          className={`mx-2 ${
+            i === page ? "text-blue-500 font-bold" : "text-gray-500"
+          }`}
+          to={`/products?page=${i}`}
+        >
+          {i}
+        </Link>
+      );
+    }
+    return pageNumbers;
   }
 
   return (
@@ -80,24 +114,30 @@ function ProductsList() {
       {products.map((product) => {
         return <ProductItem product={product} key={product._id} />;
       })}
-      <div>
+      <div className="mt-4 flex items-center">
         <button
-          disabled={pagination.currentPage === 1}
-          onClick={() => handlePageChange(pagination.currentPage - 1)}
+          className="border-2 border-gray-300 px-3 py-1 rounded-lg mr-2"
+          disabled={page === 1}
+          onClick={() => handlePageChange(page - 1)}
         >
           Previous
         </button>
-        <span>
-          Page {pagination.currentPage} of {pagination.totalPages}
-        </span>
+        {renderPageNumbers()}
         <button
-          disabled={pagination.currentPage === pagination.totalPages}
-          onClick={() => handlePageChange(pagination.currentPage + 1)}
+          className="border-2 border-gray-300 px-3 py-1 rounded-lg ml-2"
+          disabled={page === pagination.totalPages}
+          onClick={() => handlePageChange(page + 1)}
         >
           Next
         </button>
       </div>
-      <CreateProduct setProducts={setProducts} />
+
+      <CreateProduct
+        setProducts={setProducts}
+        page={page}
+        pagination={pagination}
+        setPagination={setPagination}
+      />
     </>
   );
 }

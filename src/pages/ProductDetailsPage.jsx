@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function ProductDetailsPage() {
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [editedTitle, setEditedTitle] = useState("");
   const { id: productId } = useParams();
@@ -53,13 +53,17 @@ function ProductDetailsPage() {
   function handleDeleteProduct(productId) {
     try {
       axios.delete(ProductUrl + "/" + productId);
-      navigate("/?page=1");
+      navigate("/products?page=1");
     } catch (error) {
       console.error(error);
     }
   }
   function handleBack() {
     navigate(-1);
+  }
+
+  if (!product) {
+    return <>Loading...</>;
   }
 
   return (
