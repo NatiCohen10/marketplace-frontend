@@ -1,31 +1,27 @@
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import ProductItem from "./ProductItem";
 import FilterProducts from "./FilterProducts";
+import CreateProduct from "./CreateProduct";
 
 const PRODUCTS_URL = "http://localhost:3000/api/products";
 
 function ProductsList() {
   const [products, setProducts] = useState([]);
-
   const [pagination, setPagination] = useState({
     totalItems: 0,
     totalPages: 1,
     currentPage: 1,
   });
+
   const [searchParams, setSearchParams] = useSearchParams({
     name: "",
     minPrice: "",
     maxPrice: "",
     isInStock: "",
   });
+
   const location = useLocation();
   const name = searchParams.get("name");
   const minPrice = searchParams.get("minPrice");
@@ -33,23 +29,35 @@ function ProductsList() {
   const isInStock = searchParams.get("isInStock");
 
   useEffect(() => {
+    const abortController = new AbortController();
     async function fetchProducts() {
       try {
-        const response = await axios.get(PRODUCTS_URL + location.search);
+        const response = await axios.get(PRODUCTS_URL + location.search, {
+          signal: abortController.signal,
+        });
         const productCount = await axios.get(
-          PRODUCTS_URL + "/count" + location.search
+          PRODUCTS_URL + "/count" + location.search,
+          { signal: abortController.signal }
         );
         const { limit, products, currentPage } = response.data;
         const { count } = productCount.data;
         const totalPages = Math.ceil(count / limit);
         setProducts(products);
-        setPagination({ count, totalPages, currentPage });
+        setPagination({ totalItems: count, totalPages, currentPage });
       } catch (error) {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          console.log("Request canceled:", error.message);
+        } else {
+          console.error(error);
+        }
       }
     }
     fetchProducts();
-  }, [products, location.pathname]);
+
+    return () => {
+      abortController.abort();
+    };
+  }, [location.search]);
 
   function handlePageChange(newPage) {
     setSearchParams((prev) => {
@@ -89,6 +97,7 @@ function ProductsList() {
           Next
         </button>
       </div>
+      <CreateProduct setProducts={setProducts} />
     </>
   );
 }

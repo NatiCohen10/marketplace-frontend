@@ -1,8 +1,7 @@
 import React from "react";
 
 function FilterProducts(props) {
-  const { name, setSearchParams, searchParams, minPrice, maxPrice, isInStock } =
-    props;
+  const { name, setSearchParams, searchParams, minPrice, maxPrice } = props;
 
   const toggleInStock = () => {
     setSearchParams((prev) => {

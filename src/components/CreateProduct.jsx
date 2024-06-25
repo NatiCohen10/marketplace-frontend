@@ -1,18 +1,8 @@
 import axios from "axios";
 import React, { useRef } from "react";
 
-function generateId() {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789";
-  let id = "";
-  for (let i = 0; i < 7; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    id += characters[randomIndex];
-  }
-  return id;
-}
-
-function CreateProduct() {
+function CreateProduct(props) {
+  const { setProducts } = props;
   const newProductTitleRef = useRef(null);
   const newProductPriceRef = useRef(null);
   const newProductCategoryRef = useRef(null);
@@ -21,14 +11,15 @@ function CreateProduct() {
   async function handleFormSubmit(ev) {
     ev.preventDefault();
     const newProduct = {
-      _id: generateId(),
       name: newProductTitleRef.current.value,
       price: newProductPriceRef.current.value,
       category: newProductCategoryRef.current.value,
     };
     try {
       const response = await axios.post(productUrl, newProduct);
-      console.log(response);
+      setProducts((prev) => {
+        return [...prev, response.data];
+      });
       newProductTitleRef.current.value = "";
       newProductPriceRef.current.value = "";
       newProductCategoryRef.current.value = "";

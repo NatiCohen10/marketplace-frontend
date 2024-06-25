@@ -53,7 +53,7 @@ function ProductDetailsPage() {
   function handleDeleteProduct(productId) {
     try {
       axios.delete(ProductUrl + "/" + productId);
-      navigate(-1);
+      navigate("/?page=1");
     } catch (error) {
       console.error(error);
     }
