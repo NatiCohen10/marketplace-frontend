@@ -3,6 +3,7 @@ import InputField from "../components/ui/InputField";
 import { Form, Link } from "react-router-dom";
 import FormLayout from "../components/ui/FormLayout";
 import FormInputWrapper from "../components/ui/FormInputWrapper";
+import CustomButton from "../components/ui/Button";
 
 function LoginPage() {
   const [userName, setUserName] = useState("");
@@ -43,7 +44,9 @@ function LoginPage() {
         />
       </FormInputWrapper>
 
-      <button type="submit">Log in</button>
+      <CustomButton formButton type="submit">
+        Log in
+      </CustomButton>
       <hr className="border-zinc-600 my-9" />
       <div className="mb-10">
         <p>

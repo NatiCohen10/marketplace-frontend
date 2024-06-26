@@ -4,8 +4,8 @@ import ProductsList from "../components/ProductsList";
 
 function AllProductsPage() {
   return (
-    <div className="  flex justify-center">
-      <div className=" w-7/12">
+    <div className=" ">
+      <div className=" mx-4 sm:mx-10 lg:mx-20">
         <ProductsList />
       </div>
     </div>

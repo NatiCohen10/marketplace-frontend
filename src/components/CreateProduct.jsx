@@ -1,24 +1,44 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useState } from "react";
+import InputField from "./ui/InputField";
+import CustomChip from "./ui/CustomChip";
+import FormInputWrapper from "./ui/FormInputWrapper";
+import CustomButton from "./ui/Button";
 
 function CreateProduct(props) {
   const { setProducts, page, pagination, setPagination } = props;
-  const newProductTitleRef = useRef(null);
-  const newProductPriceRef = useRef(null);
-  const newProductCategoryRef = useRef(null);
+
+  // State variables for input values
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [productCategory, setProductCategory] = useState("");
+  const [productCount, setProductCount] = useState(0);
+  const [activeCategories, setActiveCategories] = useState([]);
+
+  const categories = [
+    "Electronics",
+    "Accessories",
+    "Wearables",
+    "Smart Home",
+    "Health",
+    "Home Appliances",
+    "Automotive",
+  ];
+
   const productUrl = `http://localhost:3000/api/products`;
 
   async function handleFormSubmit(ev) {
     ev.preventDefault();
     const newProduct = {
-      name: newProductTitleRef.current.value,
-      price: newProductPriceRef.current.value,
-      category: newProductCategoryRef.current.value,
+      name: productName,
+      price: productPrice,
+      category: activeCategories,
+      count: productCount,
     };
     try {
       const response = await axios.post(productUrl, newProduct);
       const addedProduct = response.data;
-      console.log(pagination);
+
       // Update products state if we are on the last page
       if (page === pagination.totalPages) {
         setProducts((prev) => {
@@ -30,12 +50,12 @@ function CreateProduct(props) {
           return prev;
         });
       }
-
-      // Clear input fields
-      newProductTitleRef.current.value = "";
-      newProductPriceRef.current.value = "";
-      newProductCategoryRef.current.value = "";
-
+      console.log(addedProduct);
+      setProductName("");
+      setProductPrice("");
+      setProductCategory("");
+      setProductCount(0);
+      setActiveCategories([]);
       // Update the total items and potentially the total pages
       setPagination((prev) => ({
         ...prev,
@@ -47,40 +67,73 @@ function CreateProduct(props) {
     }
   }
 
+  function toggleChipActive(category) {
+    if (activeCategories.includes(category)) {
+      setActiveCategories((prev) => {
+        return prev.filter((cat) => cat !== category);
+      });
+    } else {
+      setActiveCategories((prev) => [...prev, category]);
+    }
+    console.log(activeCategories);
+  }
+
   return (
     <>
-      <h2 className="text-3xl font-bold">Create a new product</h2>
-      <form className="flex flex-col mb-7" onSubmit={handleFormSubmit}>
-        <label htmlFor="newProductName">Product name</label>
-        <input
-          className="border-2 border-black"
-          type="text"
-          id="newProductName"
-          ref={newProductTitleRef}
-          required
-        />
-        <label htmlFor="newProductPrice">Product price</label>
-        <input
-          className="border-2 border-black"
-          type="text"
-          id="newProductPrice"
-          ref={newProductPriceRef}
-          required
-        />
-        <label htmlFor="newProductCategory">Product category</label>
-        <input
-          className="border-2 border-black"
-          type="text"
-          id="newProductCategory"
-          ref={newProductCategoryRef}
-          required
-        />
-        <button
-          className="border-2 border-rose-800 w-32 rounded-lg mt-4"
-          type="submit"
-        >
+      <form
+        className="flex flex-col mb-7 bg-background-secondary shadow-md shadow-black p-5 rounded-md mt-6 w-full"
+        onSubmit={handleFormSubmit}
+      >
+        <h2 className="text-3xl font-bold my-5 lg:text-5xl lg:mb-8">
+          Create a new product
+        </h2>
+        <FormInputWrapper>
+          <InputField
+            type="text"
+            label={"Product Name"}
+            id="newProductName"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            required
+            login
+          />
+        </FormInputWrapper>
+        <FormInputWrapper>
+          <InputField
+            type="text"
+            label={"Product Price"}
+            id="newProductPrice"
+            value={productPrice}
+            onChange={(e) => setProductPrice(e.target.value)}
+            required
+            login
+          />
+        </FormInputWrapper>
+        <FormInputWrapper>
+          <InputField
+            type="number"
+            label={"Product count"}
+            id="newProductCount"
+            value={productCount}
+            onChange={(e) => setProductCount(parseInt(e.target.value))}
+            required
+            login
+          />
+        </FormInputWrapper>
+        <div className=" grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {categories.map((cat, index) => (
+            <CustomChip
+              key={index}
+              isActive={activeCategories.includes(cat)}
+              toggleActive={() => toggleChipActive(cat)}
+            >
+              {cat}
+            </CustomChip>
+          ))}
+        </div>
+        <CustomButton formButton type="submit">
           Submit
-        </button>
+        </CustomButton>
       </form>
     </>
   );

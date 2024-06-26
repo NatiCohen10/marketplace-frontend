@@ -4,6 +4,7 @@ import InputField from "../components/ui/InputField";
 import { Link, useNavigate } from "react-router-dom";
 import FormInputWrapper from "../components/ui/FormInputWrapper";
 import { ArrowLeft } from "lucide-react";
+import CustomButton from "../components/ui/Button";
 
 function SignUpPage() {
   const [userName, setUserName] = useState("");
@@ -59,7 +60,9 @@ function SignUpPage() {
         />
       </FormInputWrapper>
 
-      <button type="submit">Sign up</button>
+      <CustomButton formButton type="submit">
+        Sign up
+      </CustomButton>
       <hr className="border-zinc-600 my-9" />
       <div className="mb-10">
         <p>

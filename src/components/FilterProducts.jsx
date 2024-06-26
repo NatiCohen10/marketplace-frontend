@@ -75,39 +75,51 @@ function FilterProducts(props) {
   }
 
   return (
-    <div>
-      <InputField
-        id="productName"
-        label="Product Name"
-        type="text"
-        name="name"
-        value={name}
-        onChange={handleFilterChange}
-      />
-      <RangeSlider
-        max={1300}
-        min={0}
-        onRangeChange={handlePriceChange}
-        initialValue={[currentMinPrice, currentMaxPrice]}
-      />
-      <CheckboxField
-        id="available"
-        label="In Stock Only"
-        name="isInStock"
-        checked={searchParams.get("isInStock") === "true"}
-        onChange={handleFilterChange}
-      />
-      {categories.map((category, index) => {
-        return (
+    <div className=" lg:flex justify-between items-center">
+      <div>
+        <div className=" gap-4  sm:flex ">
+          <div className=" mb-4">
+            <InputField
+              id="productName"
+              label="Product Name:"
+              type="text"
+              name="name"
+              value={name}
+              onChange={handleFilterChange}
+            />
+          </div>
           <CheckboxField
-            key={index}
-            id={category}
-            label={category}
-            name={category}
-            onChange={handleFilterByCategory}
-          ></CheckboxField>
-        );
-      })}
+            stockCheck
+            id="available"
+            label="In Stock Only"
+            name="isInStock"
+            checked={searchParams.get("isInStock") === "true"}
+            onChange={handleFilterChange}
+          />
+        </div>
+        <RangeSlider
+          max={1300}
+          min={0}
+          onRangeChange={handlePriceChange}
+          initialValue={[currentMinPrice, currentMaxPrice]}
+        />
+      </div>
+      <div className=" my-4">
+        <h3 className=" mb-2 text-xl lg:mb-7">Filter by category: </h3>
+        <div className=" grid grid-cols-2 gap-1 lg:gap-6">
+          {categories.map((category, index) => {
+            return (
+              <CheckboxField
+                key={index}
+                id={category}
+                label={category}
+                name={category}
+                onChange={handleFilterByCategory}
+              ></CheckboxField>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

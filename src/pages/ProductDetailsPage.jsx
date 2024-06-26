@@ -1,6 +1,9 @@
 import axios from "axios";
+import { ArrowLeft, Pencil, Save, Trash } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import CustomButton from "../components/ui/Button";
+import InputField from "../components/ui/InputField";
 
 function ProductDetailsPage() {
   const [product, setProduct] = useState(null);
@@ -67,52 +70,54 @@ function ProductDetailsPage() {
   }
 
   return (
-    <>
-      <button
-        className="border-2 border-rose-800 w-32 rounded-lg mt-4"
-        onClick={handleBack}
-      >
-        back
-      </button>
-      <div>
-        {isEdit ? (
-          <div>
-            <input
-              className=" border-2 border-black"
-              type="text"
-              ref={newTitleRef}
-              value={editedTitle}
-              onChange={(ev) => setEditedTitle(ev.target.value)}
-            />
-            <button
-              className="border-2 border-rose-800 w-32 rounded-lg mt-4"
-              onClick={editTitle}
-            >
-              save changes
-            </button>
-          </div>
-        ) : (
-          <div>
-            <h1>{product.name}</h1>
-            <button
-              className="border-2 border-rose-800 w-32 rounded-lg mt-4"
-              onClick={toggleIsEdit}
-            >
-              edit title
-            </button>
-          </div>
-        )}
+    <div className=" shadow-md shadow-gray-400 flex justify-center items-center mt-72 bg-stone-300   mx-4 sm:mx-10 lg:mx-20 p-10 relative rounded-md">
+      <div className=" ">
+        <div className=" absolute -top-1 -left-1">
+          <CustomButton onClick={handleBack}>
+            <ArrowLeft color="red" />
+          </CustomButton>
+        </div>
 
-        <p>{product.price}$</p>
-        <p>{product.category}</p>
-        <button
-          className="border-2 border-rose-800 w-32 rounded-lg mt-4"
-          onClick={() => handleDeleteProduct(product._id)}
-        >
-          delete product
-        </button>
+        <div className=" ">
+          {isEdit ? (
+            <div className=" flex  mb-6">
+              <InputField
+                className=" border-2 border-black"
+                type="text"
+                ref={newTitleRef}
+                value={editedTitle}
+                onChange={(ev) => setEditedTitle(ev.target.value)}
+                login
+              />
+              <CustomButton onClick={editTitle}>
+                <Save size={28} color="blue" />
+              </CustomButton>
+            </div>
+          ) : (
+            <div>
+              <div className=" flex mb-6">
+                <h1 className=" text-4xl  font-bold text-blue-600">
+                  {product.name}
+                </h1>
+                <CustomButton onClick={toggleIsEdit}>
+                  <Pencil size={28} color="blue" />
+                </CustomButton>
+              </div>
+            </div>
+          )}
+          <div className=" flex flex-col gap-5">
+            <p>Price: ${product.price}</p>
+            <p>Category: {product.category}</p>
+            <p>Quantity: {product.quantity}</p>
+          </div>
+          <div className=" flex justify-end">
+            <CustomButton onClick={() => handleDeleteProduct(product._id)}>
+              <Trash size={28} color="#fb1313" />
+            </CustomButton>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

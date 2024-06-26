@@ -105,49 +105,54 @@ function ProductsList() {
 
   return (
     <>
-      <h2 className=" text-4xl font-bold">All products</h2>
-      <FilterProducts
-        name={name}
-        setSearchParams={setSearchParams}
-        searchParams={searchParams}
-        currentMaxPrice={currentMaxPrice}
-        currentMinPrice={currentMinPrice}
-        isInStock={isInStock}
-      />
-      {products.map((product) => {
-        return <ProductItem product={product} key={product._id} />;
-      })}
+      <div className=" mt-32">
+        <h1 className=" text-4xl font-bold mb-4 lg:text-7xl lg:mb-8">
+          All products
+        </h1>
+        <FilterProducts
+          name={name}
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
+          currentMaxPrice={currentMaxPrice}
+          currentMinPrice={currentMinPrice}
+          isInStock={isInStock}
+        />
+        <div className=" grid grid-cols-1 gap-5 mt-6 sm:grid-cols-2 lg:grid-cols-3 lg:mb-6 xl:grid-cols-5">
+          {products.map((product) => {
+            return <ProductItem product={product} key={product._id} />;
+          })}
+        </div>
+        <div className="mt-4 flex items-center justify-between">
+          <button
+            className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
+              page === 1 ? "text-gray-500 cursor-not-allowed" : "text-black"
+            }`}
+            disabled={page === 1}
+            onClick={() => handlePageChange(page - 1)}
+          >
+            <ChevronLeft size={28} />
+          </button>
+          {renderPageNumbers()}
+          <button
+            className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
+              page === pagination.totalPages
+                ? "text-gray-500 cursor-not-allowed"
+                : "text-black"
+            }`}
+            disabled={page === pagination.totalPages}
+            onClick={() => handlePageChange(page + 1)}
+          >
+            <ChevronRight size={28} />
+          </button>
+        </div>
 
-      <div className="mt-4 flex items-center">
-        <button
-          className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
-            page === 1 ? "text-gray-500 cursor-not-allowed" : "text-black"
-          }`}
-          disabled={page === 1}
-          onClick={() => handlePageChange(page - 1)}
-        >
-          <ChevronLeft size={28} />
-        </button>
-        {renderPageNumbers()}
-        <button
-          className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
-            page === pagination.totalPages
-              ? "text-gray-500 cursor-not-allowed"
-              : "text-black"
-          }`}
-          disabled={page === pagination.totalPages}
-          onClick={() => handlePageChange(page + 1)}
-        >
-          <ChevronRight size={28} />
-        </button>
+        <CreateProduct
+          setProducts={setProducts}
+          page={page}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
       </div>
-
-      <CreateProduct
-        setProducts={setProducts}
-        page={page}
-        pagination={pagination}
-        setPagination={setPagination}
-      />
     </>
   );
 }

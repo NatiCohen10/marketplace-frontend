@@ -7,14 +7,13 @@ function RangeSlider({ min, max, onRangeChange, initialValue }) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-
     onRangeChange(newValue[0], newValue[1]);
   };
 
   return (
-    <div className=" w-96">
+    <div className="w-full my-2 sm:w-96 lg:ml-1">
       <Typography id="range-slider" gutterBottom>
-        Price Range
+        Price Range:
       </Typography>
       <Slider
         value={value}

@@ -6,8 +6,10 @@ function TopNavLink(props) {
   return (
     <NavLink
       className={({ isActive }) =>
-        `hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium ${
-          isActive ? "text-orange-500 border-b-2 border-black" : "text-gray-700"
+        ` px-3 pt-2 pb-1  font-medium ${
+          isActive
+            ? "text-primary border-b  border-black hover:bg-primary hover:text-white hover:border-b-0"
+            : "text-gray-700 hover:bg-secondary hover:text-white"
         }`
       }
       to={href}
@@ -19,25 +21,25 @@ function TopNavLink(props) {
 
 function Navbar() {
   return (
-    <nav className="bg-gray-200 py-4">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-16">
-          <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex-shrink-0">
-              <span className="text-xl font-bold text-gray-900">Logo</span>
-            </div>
-            <div className=" sm:block sm:ml-6">
-              <div className="flex space-x-4">
-                <TopNavLink href="/">Home</TopNavLink>
-                <TopNavLink href="/products">Products</TopNavLink>
-              </div>
-              <div>
-                <TopNavLink href="/login">Login</TopNavLink>
-              </div>
-            </div>
-          </div>
+    <nav className="bg-background-400 fixed top-0 left-0 w-full z-50 sm:text-lg">
+      <ul className=" flex justify-between mr-4  sm:mr-10 lg:mr-20">
+        <div className="bg-primary flex justify-center items-center  ">
+          <li className="  text-white font-bold text-2xl uppercase ml-4 pr-4 sm:pr-10 lg:pr-20  sm:ml-10 lg:ml-20">
+            marketease<span className=" text-secondary">.</span>
+          </li>
         </div>
-      </div>
+        <div className="flex py-4  gap-2 sm:gap-4 lg:gap-6">
+          <li>
+            <TopNavLink href={"/"}>Home</TopNavLink>
+          </li>
+          <li>
+            <TopNavLink href={"/products"}>Products</TopNavLink>
+          </li>
+          <li>
+            <TopNavLink href={"/login"}>Login</TopNavLink>
+          </li>
+        </div>
+      </ul>
     </nav>
   );
 }
