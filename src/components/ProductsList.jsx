@@ -4,6 +4,7 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import ProductItem from "./ProductItem";
 import FilterProducts from "./FilterProducts";
 import CreateProduct from "./CreateProduct";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PRODUCTS_URL = "http://localhost:3000/api/products";
 
@@ -18,7 +19,7 @@ function ProductsList() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const location = useLocation();
-  const name = searchParams.get("name");
+  const name = searchParams.get("name") || "";
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
   const isInStock = searchParams.get("isInStock");
@@ -26,12 +27,6 @@ function ProductsList() {
 
   useEffect(() => {
     const abortController = new AbortController();
-
-    if (page < 1) {
-      searchParams.set("page", "1");
-      setSearchParams(searchParams);
-      return;
-    }
 
     async function fetchProducts() {
       try {
@@ -86,15 +81,14 @@ function ProductsList() {
     const pageNumbers = [];
     for (let i = 1; i <= pagination.totalPages; i++) {
       pageNumbers.push(
-        <Link
+        <p
           key={i}
           className={`mx-2 ${
             i === page ? "text-blue-500 font-bold" : "text-gray-500"
           }`}
-          to={`/products?page=${i}`}
         >
           {i}
-        </Link>
+        </p>
       );
     }
     return pageNumbers;
@@ -114,21 +108,28 @@ function ProductsList() {
       {products.map((product) => {
         return <ProductItem product={product} key={product._id} />;
       })}
+
       <div className="mt-4 flex items-center">
         <button
-          className="border-2 border-gray-300 px-3 py-1 rounded-lg mr-2"
+          className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
+            page === 1 ? "text-gray-500 cursor-not-allowed" : "text-black"
+          }`}
           disabled={page === 1}
           onClick={() => handlePageChange(page - 1)}
         >
-          Previous
+          <ChevronLeft size={28} />
         </button>
         {renderPageNumbers()}
         <button
-          className="border-2 border-gray-300 px-3 py-1 rounded-lg ml-2"
+          className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
+            page === pagination.totalPages
+              ? "text-gray-500 cursor-not-allowed"
+              : "text-black"
+          }`}
           disabled={page === pagination.totalPages}
           onClick={() => handlePageChange(page + 1)}
         >
-          Next
+          <ChevronRight size={28} />
         </button>
       </div>
 
