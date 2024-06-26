@@ -20,10 +20,18 @@ function ProductsList() {
 
   const location = useLocation();
   const name = searchParams.get("name") || "";
-  const minPrice = searchParams.get("minPrice");
-  const maxPrice = searchParams.get("maxPrice");
   const isInStock = searchParams.get("isInStock");
   const page = parseInt(searchParams.get("page")) || 1;
+  let priceRange = searchParams.get("price");
+
+  if (priceRange) {
+    priceRange = priceRange.split("-").map(Number);
+  } else {
+    priceRange = [0, 1300];
+  }
+
+  const currentMinPrice = priceRange[0];
+  const currentMaxPrice = priceRange[1];
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -42,7 +50,8 @@ function ProductsList() {
         const { count } = productCount.data;
         const totalPages = Math.ceil(count / limit);
 
-        if (page > totalPages) {
+        //might cause bugs with query
+        if (page > totalPages && products.length !== 0) {
           setSearchParams((prev) => {
             prev.set("page", totalPages.toString());
             return prev;
@@ -101,8 +110,8 @@ function ProductsList() {
         name={name}
         setSearchParams={setSearchParams}
         searchParams={searchParams}
-        minPrice={minPrice}
-        maxPrice={maxPrice}
+        currentMaxPrice={currentMaxPrice}
+        currentMinPrice={currentMinPrice}
         isInStock={isInStock}
       />
       {products.map((product) => {
