@@ -11,6 +11,7 @@ function FilterProducts(props) {
     searchParams,
     currentMinPrice,
     currentMaxPrice,
+    currentCategories,
   } = props;
 
   function handleFilterChange(ev) {
@@ -75,49 +76,53 @@ function FilterProducts(props) {
   }
 
   return (
-    <div className=" lg:flex justify-between items-center">
-      <div>
-        <div className=" gap-4  sm:flex ">
-          <div className=" mb-4">
-            <InputField
-              id="productName"
-              label="Product Name:"
-              type="text"
-              name="name"
-              value={name}
+    <div>
+      <h2 className=" text-4xl font-bold">Filter products</h2>
+      <div className=" lg:flex lg:gap-4  items-center">
+        <div>
+          <div className=" gap-4  sm:flex ">
+            <div className=" mb-4">
+              <InputField
+                id="productName"
+                label="Product Name:"
+                type="text"
+                name="name"
+                value={name}
+                onChange={handleFilterChange}
+              />
+            </div>
+            <CheckboxField
+              stockCheck
+              id="available"
+              label="In Stock Only"
+              name="isInStock"
+              checked={searchParams.get("isInStock") === "true"}
               onChange={handleFilterChange}
             />
           </div>
-          <CheckboxField
-            stockCheck
-            id="available"
-            label="In Stock Only"
-            name="isInStock"
-            checked={searchParams.get("isInStock") === "true"}
-            onChange={handleFilterChange}
+          <RangeSlider
+            max={1300}
+            min={0}
+            onRangeChange={handlePriceChange}
+            initialValue={[currentMinPrice, currentMaxPrice]}
           />
         </div>
-        <RangeSlider
-          max={1300}
-          min={0}
-          onRangeChange={handlePriceChange}
-          initialValue={[currentMinPrice, currentMaxPrice]}
-        />
-      </div>
-      <div className=" my-4">
-        <h3 className=" mb-2 text-xl lg:mb-7">Filter by category: </h3>
-        <div className=" grid grid-cols-2 gap-1 lg:gap-6">
-          {categories.map((category, index) => {
-            return (
-              <CheckboxField
-                key={index}
-                id={category}
-                label={category}
-                name={category}
-                onChange={handleFilterByCategory}
-              ></CheckboxField>
-            );
-          })}
+        <div className=" my-4">
+          <h3 className=" mb-2 text-xl lg:mb-7">Filter by category: </h3>
+          <div className=" grid grid-cols-2 gap-1 lg:gap-6 lg:grid-cols-3">
+            {categories.map((category, index) => {
+              return (
+                <CheckboxField
+                  key={index}
+                  id={category}
+                  label={category}
+                  name={category}
+                  checked={currentCategories.includes(category)}
+                  onChange={handleFilterByCategory}
+                ></CheckboxField>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

@@ -14,8 +14,7 @@ const InputField = React.forwardRef(
           id={id || ""}
           className={cn(
             "border border-black rounded-md p-1 px-2 ml-3",
-            login &&
-              " py-2 rounded-md pl-3 border-none sm:w-8/12 ml-0 lg:w-10/12 "
+            login && " py-2 rounded-md pl-3 border-none  "
           )}
           type={type}
           name={name}

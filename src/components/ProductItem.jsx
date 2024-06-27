@@ -15,12 +15,20 @@ function ProductItem({ product }) {
           alt={product.name}
         />
 
-        <li className=" list-none flex flex-col px-7 py-8   ">
+        <li className=" list-none flex flex-col px-7 py-8 justify-between h-56 md:justify-between md:h-64   ">
           <h2 className=" text-primary font-bold text-2xl mb-3">
             {product.name}
           </h2>
           <p className=" text-slate-700">${product.price}</p>
-          <CustomChip productChip>{product.category}</CustomChip>
+          <div className=" flex gap-3 flex-wrap mt-4">
+            {product.category.map((category, index) => {
+              return (
+                <CustomChip productChip key={index}>
+                  {category}
+                </CustomChip>
+              );
+            })}
+          </div>
         </li>
       </Link>
     </div>

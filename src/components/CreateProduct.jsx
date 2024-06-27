@@ -81,7 +81,7 @@ function CreateProduct(props) {
   return (
     <>
       <form
-        className="flex flex-col mb-7 bg-background-secondary shadow-md shadow-black p-5 rounded-md mt-6 w-full"
+        className="flex flex-col mb-7 bg-zinc-200 shadow-md shadow-black p-5 rounded-md mt-6 w-full"
         onSubmit={handleFormSubmit}
       >
         <h2 className="text-3xl font-bold my-5 lg:text-5xl lg:mb-8">

@@ -33,6 +33,15 @@ export default {
           600: "#319795",
         },
       },
+      keyframes: {
+        fadeInUp: {
+          "0%": { opacity: 0, transform: "translateX(-40px)" },
+          "100%": { opacity: 1, transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        fadeInUp: "fadeInUp 0.7s ease forwards",
+      },
     },
   },
   plugins: [],

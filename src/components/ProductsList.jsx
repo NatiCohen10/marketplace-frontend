@@ -5,6 +5,7 @@ import ProductItem from "./ProductItem";
 import FilterProducts from "./FilterProducts";
 import CreateProduct from "./CreateProduct";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import useDebounce from "../hooks/UseDebounce";
 
 const PRODUCTS_URL = "http://localhost:3000/api/products";
 
@@ -17,9 +18,16 @@ function ProductsList() {
   const [loading, setLoading] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const debouncedSearchItem = useDebounce(searchParams, 400);
 
   const location = useLocation();
   const name = searchParams.get("name") || "";
+  let categories = searchParams.get("category");
+  if (categories) {
+    categories = categories.split(",");
+  } else {
+    categories = [];
+  }
   const isInStock = searchParams.get("isInStock");
   const page = parseInt(searchParams.get("page")) || 1;
   let priceRange = searchParams.get("price");
@@ -76,7 +84,7 @@ function ProductsList() {
     return () => {
       abortController.abort();
     };
-  }, [location.search]);
+  }, [debouncedSearchItem]);
 
   function handlePageChange(newPage) {
     if (newPage < 1 || newPage > pagination.totalPages) return;
@@ -105,11 +113,12 @@ function ProductsList() {
 
   return (
     <>
-      <div className=" mt-32">
-        <h1 className=" text-4xl font-bold mb-4 lg:text-7xl lg:mb-8">
+      <div className=" mt-20 ">
+        <h1 className=" text-4xl font-bold mb-4 lg:text-7xl  lg:mb-14">
           All products
         </h1>
         <FilterProducts
+          currentCategories={categories}
           name={name}
           setSearchParams={setSearchParams}
           searchParams={searchParams}
@@ -117,7 +126,7 @@ function ProductsList() {
           currentMinPrice={currentMinPrice}
           isInStock={isInStock}
         />
-        <div className=" grid grid-cols-1 gap-5 mt-6 sm:grid-cols-2 lg:grid-cols-3 lg:mb-6 xl:grid-cols-5">
+        <div className=" grid grid-cols-1 gap-5 mt-6 sm:grid-cols-2 lg:grid-cols-3 lg:mb-6 xl:grid-cols-4">
           {products.map((product) => {
             return <ProductItem product={product} key={product._id} />;
           })}

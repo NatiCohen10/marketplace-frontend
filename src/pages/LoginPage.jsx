@@ -19,44 +19,49 @@ function LoginPage() {
   }
 
   return (
-    <FormLayout handleFormSubmit={handleFormSubmit} headerText={"Login"}>
-      <FormInputWrapper>
-        <InputField
-          login
-          type="text"
-          label={"Username:"}
-          id="userName"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          required
-          placeholder="JaneDoe123"
-        />
-      </FormInputWrapper>
-      <FormInputWrapper>
-        <InputField
-          login
-          label={"Password:"}
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </FormInputWrapper>
+    <div className=" h-screen flex justify-center items-center">
+      <FormLayout handleFormSubmit={handleFormSubmit} headerText={"Login"}>
+        <FormInputWrapper>
+          <InputField
+            login
+            type="text"
+            label={"Username:"}
+            id="userName"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            required
+            placeholder="JaneDoe123"
+          />
+        </FormInputWrapper>
+        <FormInputWrapper>
+          <InputField
+            login
+            label={"Password:"}
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </FormInputWrapper>
 
-      <CustomButton formButton type="submit">
-        Log in
-      </CustomButton>
-      <hr className="border-zinc-600 my-9" />
-      <div className="mb-10">
-        <p>
-          Don't have an account?{" "}
-          <Link className="hover:border-b hover:border-b-black" to={"/signup"}>
-            Sign up!
-          </Link>
-        </p>
-      </div>
-    </FormLayout>
+        <CustomButton formButton type="submit">
+          Log in
+        </CustomButton>
+        <hr className="border-zinc-600 my-9" />
+        <div className="mb-10">
+          <p>
+            Don't have an account?{" "}
+            <Link
+              className="hover:border-b hover:border-b-black"
+              to={"/signup"}
+            >
+              Sign up!
+            </Link>
+          </p>
+        </div>
+      </FormLayout>
+    </div>
   );
 }
 
