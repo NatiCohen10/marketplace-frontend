@@ -1,21 +1,39 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import InputField from "../components/ui/InputField";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useNavigate } from "react-router-dom";
 import FormLayout from "../components/ui/FormLayout";
 import FormInputWrapper from "../components/ui/FormInputWrapper";
 import CustomButton from "../components/ui/Button";
+import axios from "axios";
+import UserContext from "../contexts/UserContext";
 
 function LoginPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { user, setUser, token, getUserById } = useContext(UserContext);
 
-  function handleFormSubmit(ev) {
+  async function handleFormSubmit(ev) {
     ev.preventDefault();
-    const user = {
-      userName,
+    const newUser = {
+      username: userName,
       password,
     };
-    console.log(user);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        newUser
+      );
+      localStorage.setItem("token", response.data.token);
+      console.log("set item", response.data.token);
+      getUserById(response.data.token);
+      navigate("/");
+
+      console.log("loginPage", user);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

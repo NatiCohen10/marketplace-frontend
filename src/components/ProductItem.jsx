@@ -6,7 +6,7 @@ function ProductItem({ product }) {
   return (
     <div
       key={product._id}
-      className=" rounded-lg shadow-lg shadow-gray-600 border border-zinc-600 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-600 cursor-pointer transition-transform w-full overflow-hidden lg:hover:-translate-y-3"
+      className=" rounded-lg shadow-lg  border  hover:-translate-y-1 hover:shadow-xl cursor-pointer transition-transform w-full overflow-hidden lg:hover:-translate-y-3"
     >
       <Link to={product._id} key={product._id}>
         <img
@@ -21,7 +21,7 @@ function ProductItem({ product }) {
           </h2>
           <p className=" text-slate-700">${product.price}</p>
           <div className=" flex gap-3 flex-wrap mt-4">
-            {product.category.map((category, index) => {
+            {product.categories.map((category, index) => {
               return (
                 <CustomChip productChip key={index}>
                   {category}

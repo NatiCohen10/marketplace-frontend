@@ -15,7 +15,7 @@ function HomePage() {
     });
   }
 
-  const observer = useIntersectionObserver(callback, { threshold: 0.1 });
+  const observer = useIntersectionObserver(callback, { threshold: 0.15 });
 
   useEffect(() => {
     const { current: currentObserver } = observer;
@@ -31,11 +31,16 @@ function HomePage() {
 
   return (
     <div className=" mx-4 sm:mx-10 lg:mx-20">
-      <div className="container min-h-screen">
+      <img
+        src="src\images\hero-image.jpeg"
+        alt="logo"
+        className=" mt-20 min-h-60vh"
+      />
+      <div className="container min-h-">
         <ContentWrapper>
           <h1
             ref={(el) => (sectionsRef.current[0] = el)}
-            className="text-4xl font-bold text-primary mb-4"
+            className="text-4xl  font-bold text-primary mb-4"
           >
             Welcome to MarketEase
           </h1>

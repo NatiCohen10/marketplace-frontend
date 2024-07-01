@@ -6,6 +6,7 @@ import FilterProducts from "./FilterProducts";
 import CreateProduct from "./CreateProduct";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useDebounce from "../hooks/UseDebounce";
+import PageRange from "./PageRange";
 
 const PRODUCTS_URL = "http://localhost:3000/api/products";
 
@@ -21,6 +22,7 @@ function ProductsList() {
   const debouncedSearchItem = useDebounce(searchParams, 400);
 
   const location = useLocation();
+
   const name = searchParams.get("name") || "";
   let categories = searchParams.get("category");
   if (categories) {
@@ -86,31 +88,6 @@ function ProductsList() {
     };
   }, [debouncedSearchItem]);
 
-  function handlePageChange(newPage) {
-    if (newPage < 1 || newPage > pagination.totalPages) return;
-    setSearchParams((prev) => {
-      prev.set("page", newPage);
-      return prev;
-    });
-  }
-
-  function renderPageNumbers() {
-    const pageNumbers = [];
-    for (let i = 1; i <= pagination.totalPages; i++) {
-      pageNumbers.push(
-        <p
-          key={i}
-          className={`mx-2 ${
-            i === page ? "text-blue-500 font-bold" : "text-gray-500"
-          }`}
-        >
-          {i}
-        </p>
-      );
-    }
-    return pageNumbers;
-  }
-
   return (
     <>
       <div className=" mt-20 ">
@@ -131,29 +108,11 @@ function ProductsList() {
             return <ProductItem product={product} key={product._id} />;
           })}
         </div>
-        <div className="mt-4 flex items-center justify-between">
-          <button
-            className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
-              page === 1 ? "text-gray-500 cursor-not-allowed" : "text-black"
-            }`}
-            disabled={page === 1}
-            onClick={() => handlePageChange(page - 1)}
-          >
-            <ChevronLeft size={28} />
-          </button>
-          {renderPageNumbers()}
-          <button
-            className={`border-2 border-gray-300 px-3 py-1 rounded-lg mr-2 ${
-              page === pagination.totalPages
-                ? "text-gray-500 cursor-not-allowed"
-                : "text-black"
-            }`}
-            disabled={page === pagination.totalPages}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            <ChevronRight size={28} />
-          </button>
-        </div>
+        <PageRange
+          page={page}
+          pagination={pagination}
+          setSearchParams={setSearchParams}
+        />
 
         <CreateProduct
           setProducts={setProducts}

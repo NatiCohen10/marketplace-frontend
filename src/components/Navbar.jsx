@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import userContext from "../contexts/UserContext";
+import UserAvatar from "./ui/UserAvatar";
 
 function TopNavLink(props) {
   const { href, children } = props;
@@ -20,6 +22,11 @@ function TopNavLink(props) {
 }
 
 function Navbar() {
+  const { user } = useContext(userContext);
+  if (user) {
+    console.log("navbar", user.firstName);
+  }
+
   return (
     <nav className="bg-background-400 fixed top-0 left-0 w-full z-50 sm:text-lg">
       <ul className=" flex justify-between mr-4  sm:mr-10 lg:mr-20">
@@ -36,7 +43,11 @@ function Navbar() {
             <TopNavLink href={"/products"}>Products</TopNavLink>
           </li>
           <li>
-            <TopNavLink href={"/login"}>Login</TopNavLink>
+            {user ? (
+              <UserAvatar />
+            ) : (
+              <TopNavLink href={"/login"}>Login</TopNavLink>
+            )}
           </li>
         </div>
       </ul>

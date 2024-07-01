@@ -5,25 +5,35 @@ import { Link, useNavigate } from "react-router-dom";
 import FormInputWrapper from "../components/ui/FormInputWrapper";
 import { ArrowLeft } from "lucide-react";
 import CustomButton from "../components/ui/Button";
+import axios from "axios";
 
 function SignUpPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const navigate = useNavigate();
 
-  function handleFormSubmit(ev) {
+  async function handleFormSubmit(ev) {
     ev.preventDefault();
     const user = {
-      name: userName,
+      username: userName,
       password: password,
-      email: email,
+      firstName,
+      lastName,
     };
-    console.log(user);
+
+    try {
+      console.log(user);
+      await axios.post("http://localhost:3000/api/auth/register", user);
+      // navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
-    <div className=" h-screen flex justify-center items-center">
+    <div className=" h-screen mt-7 flex justify-center items-center">
       <FormLayout handleFormSubmit={handleFormSubmit} headerText={"Signup"}>
         <FormInputWrapper>
           <InputField
@@ -50,14 +60,26 @@ function SignUpPage() {
         </FormInputWrapper>
         <FormInputWrapper>
           <InputField
-            id={"userEmail"}
+            id={"firstName"}
             login
             required
-            type={"email"}
-            placeholder={"email@example.com"}
-            label={"Your email:"}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type={"text"}
+            placeholder={"Jane"}
+            label={"First Name:"}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </FormInputWrapper>
+        <FormInputWrapper>
+          <InputField
+            id={"lastName"}
+            login
+            required
+            type={"text"}
+            placeholder={"Doe"}
+            label={"Last Name:"}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
         </FormInputWrapper>
 

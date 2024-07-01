@@ -7,6 +7,9 @@ export default {
         // Custom grid template
         "3-1-2": "3fr 1fr 2fr",
       },
+      minHeight: {
+        "60vh": "60vh",
+      },
       colors: {
         primary: "#2563EB",
 
