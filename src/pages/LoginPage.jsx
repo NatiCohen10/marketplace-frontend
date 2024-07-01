@@ -28,7 +28,7 @@ function LoginPage() {
       localStorage.setItem("token", response.data.token);
 
       console.log("set item", response.data.token);
-      const currentUser = getUserById(response.data.token);
+      const currentUser = await getUserById(response.data.token);
       setUser(currentUser);
       navigate("/");
 

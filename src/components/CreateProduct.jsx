@@ -45,7 +45,7 @@ function CreateProduct(props) {
       });
       const addedProduct = response.data.savedProduct;
       const { userAddedWithoutPassword } = response.data;
-      console.log(userAddedWithoutPassword.products);
+
       // const addedProduct = response.data;
 
       // Update products state if we are on the last page
@@ -84,7 +84,6 @@ function CreateProduct(props) {
     } else {
       setActiveCategories((prev) => [...prev, category]);
     }
-    console.log(activeCategories);
   }
 
   return (

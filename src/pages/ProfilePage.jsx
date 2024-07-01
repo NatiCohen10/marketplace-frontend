@@ -17,9 +17,9 @@ function ProfilePage() {
     async function getCurrentUser() {
       try {
         const currentUser = await getUserById(token);
-        console.log(currentUser);
-        setUser(currentUser);
+
         setUserProducts(currentUser.products);
+        console.log(user);
       } catch (error) {
         console.log(error);
       }

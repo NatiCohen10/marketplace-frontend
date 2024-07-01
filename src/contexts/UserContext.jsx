@@ -20,12 +20,17 @@ export function UserProvider({ children }) {
     }
   }
   useEffect(() => {
-    if (token !== null) {
-      const currentUser = getUserById(token);
-      setUser(currentUser);
-    } else {
-      setUser(null);
+    async function getUserOnrefresh() {
+      if (token !== null) {
+        try {
+          const currentUser = await getUserById(token);
+          setUser(currentUser);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
+    getUserOnrefresh();
   }, []);
 
   return (

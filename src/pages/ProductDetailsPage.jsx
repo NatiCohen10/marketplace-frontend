@@ -1,9 +1,10 @@
 import axios from "axios";
 import { ArrowLeft, Pencil, Save, Trash } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomButton from "../components/ui/Button";
 import InputField from "../components/ui/InputField";
+import UserContext from "../contexts/UserContext";
 
 function ProductDetailsPage() {
   const [product, setProduct] = useState(null);
@@ -12,6 +13,8 @@ function ProductDetailsPage() {
   const { id: productId } = useParams();
   const newTitleRef = useRef(null);
   const navigate = useNavigate();
+  const { user, token } = useContext(UserContext);
+  console.log(user);
 
   const ProductUrl = `http://localhost:3000/api/products`;
 
@@ -55,7 +58,11 @@ function ProductDetailsPage() {
 
   function handleDeleteProduct(productId) {
     try {
-      axios.delete(ProductUrl + "/" + productId);
+      axios.delete(ProductUrl + "/" + productId, {
+        headers: {
+          Authorization: token,
+        },
+      });
       navigate("/products?page=1");
     } catch (error) {
       console.error(error);
@@ -110,10 +117,12 @@ function ProductDetailsPage() {
             <p>Category: {product.category}</p>
             <p>Quantity: {product.quantity}</p>
           </div>
-          <div className=" flex justify-end">
-            <CustomButton onClick={() => handleDeleteProduct(product._id)}>
-              <Trash size={28} color="#fb1313" />
-            </CustomButton>
+          <div className="flex justify-end">
+            {user && user._id === product.user && (
+              <CustomButton onClick={() => handleDeleteProduct(product._id)}>
+                <Trash size={28} color="#fb1313" />
+              </CustomButton>
+            )}
           </div>
         </div>
       </div>
