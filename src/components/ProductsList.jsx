@@ -70,6 +70,7 @@ function ProductsList() {
         }
 
         setProducts(products);
+        console.log(products);
         setPagination({ totalItems: count, totalPages });
       } catch (error) {
         if (axios.isCancel(error)) {

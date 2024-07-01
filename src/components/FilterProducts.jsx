@@ -36,12 +36,11 @@ function FilterProducts(props) {
 
   const categories = [
     "Electronics",
-    "Accessories",
-    "Wearables",
-    "Smart Home",
-    "Health",
-    "Home Appliances",
-    "Automotive",
+    "Computers",
+    "Books",
+    "Office Supplies",
+    "Furniture",
+    "Bags",
   ];
 
   function handleFilterByCategory(ev) {

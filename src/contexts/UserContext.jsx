@@ -13,20 +13,16 @@ export function UserProvider({ children }) {
   async function getUserById(token) {
     try {
       const { userId } = formatJWTTokenToUser(token);
-      console.log(userId);
       const res = await axios.get(`http://localhost:3000/api/users/${userId}`);
-      setUser(res.data);
-      console.log("userContext", user);
+      return res.data;
     } catch (err) {
       console.log(err);
     }
   }
   useEffect(() => {
-    console.log("token before check", token);
-
-    if (token) {
-      console.log("token after check", token);
-      getUserById();
+    if (token !== null) {
+      const currentUser = getUserById(token);
+      setUser(currentUser);
     } else {
       setUser(null);
     }

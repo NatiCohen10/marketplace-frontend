@@ -23,9 +23,6 @@ function TopNavLink(props) {
 
 function Navbar() {
   const { user } = useContext(userContext);
-  if (user) {
-    console.log("navbar", user.firstName);
-  }
 
   return (
     <nav className="bg-background-400 fixed top-0 left-0 w-full z-50 sm:text-lg">

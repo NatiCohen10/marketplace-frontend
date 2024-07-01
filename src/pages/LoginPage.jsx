@@ -11,7 +11,7 @@ function LoginPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { user, setUser, token, getUserById } = useContext(UserContext);
+  const { user, getUserById, setUser } = useContext(UserContext);
 
   async function handleFormSubmit(ev) {
     ev.preventDefault();
@@ -26,8 +26,10 @@ function LoginPage() {
         newUser
       );
       localStorage.setItem("token", response.data.token);
+
       console.log("set item", response.data.token);
-      getUserById(response.data.token);
+      const currentUser = getUserById(response.data.token);
+      setUser(currentUser);
       navigate("/");
 
       console.log("loginPage", user);

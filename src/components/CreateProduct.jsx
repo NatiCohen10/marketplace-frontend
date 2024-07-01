@@ -1,12 +1,14 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import InputField from "./ui/InputField";
 import CustomChip from "./ui/CustomChip";
 import FormInputWrapper from "./ui/FormInputWrapper";
 import CustomButton from "./ui/Button";
+import UserContext from "../contexts/UserContext";
 
 function CreateProduct(props) {
   const { setProducts, page, pagination, setPagination } = props;
+  const { setUser } = useContext(UserContext);
 
   // State variables for input values
   const [productName, setProductName] = useState("");
@@ -14,15 +16,15 @@ function CreateProduct(props) {
   const [productCategory, setProductCategory] = useState("");
   const [productCount, setProductCount] = useState(0);
   const [activeCategories, setActiveCategories] = useState([]);
+  const token = localStorage.getItem("token");
 
   const categories = [
     "Electronics",
-    "Accessories",
-    "Wearables",
-    "Smart Home",
-    "Health",
-    "Home Appliances",
-    "Automotive",
+    "Computers",
+    "Books",
+    "Office Supplies",
+    "Furniture",
+    "Bags",
   ];
 
   const productUrl = `http://localhost:3000/api/products`;
@@ -32,12 +34,19 @@ function CreateProduct(props) {
     const newProduct = {
       name: productName,
       price: productPrice,
-      category: activeCategories,
-      count: productCount,
+      quantity: productCount,
+      categories: activeCategories,
     };
     try {
-      const response = await axios.post(productUrl, newProduct);
-      const addedProduct = response.data;
+      const response = await axios.post(productUrl, newProduct, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      const addedProduct = response.data.savedProduct;
+      const { userAddedWithoutPassword } = response.data;
+      console.log(userAddedWithoutPassword.products);
+      // const addedProduct = response.data;
 
       // Update products state if we are on the last page
       if (page === pagination.totalPages) {
@@ -50,7 +59,7 @@ function CreateProduct(props) {
           return prev;
         });
       }
-      console.log(addedProduct);
+      setUser(userAddedWithoutPassword);
       setProductName("");
       setProductPrice("");
       setProductCategory("");
