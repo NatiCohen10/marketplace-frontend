@@ -19,7 +19,6 @@ function ProfilePage() {
         const currentUser = await getUserById(token);
 
         setUserProducts(currentUser.products);
-        console.log(user);
       } catch (error) {
         console.log(error);
       }

@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import ProductItem from "./ProductItem";
@@ -7,8 +6,9 @@ import CreateProduct from "./CreateProduct";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useDebounce from "../hooks/UseDebounce";
 import PageRange from "./PageRange";
+import api from "../services/api.service";
 
-const PRODUCTS_URL = "http://localhost:3000/api/products";
+const PRODUCTS_URL = "/products";
 
 function ProductsList() {
   const [products, setProducts] = useState([]);
@@ -24,7 +24,7 @@ function ProductsList() {
   const location = useLocation();
 
   const name = searchParams.get("name") || "";
-  let categories = searchParams.get("category");
+  let categories = searchParams.get("categories");
   if (categories) {
     categories = categories.split(",");
   } else {
@@ -49,10 +49,10 @@ function ProductsList() {
     async function fetchProducts() {
       try {
         setLoading(true);
-        const response = await axios.get(PRODUCTS_URL + location.search, {
+        const response = await api.get(PRODUCTS_URL + location.search, {
           signal: abortController.signal,
         });
-        const productCount = await axios.get(
+        const productCount = await api.get(
           PRODUCTS_URL + "/count" + location.search,
           { signal: abortController.signal }
         );
@@ -73,7 +73,7 @@ function ProductsList() {
 
         setPagination({ totalItems: count, totalPages });
       } catch (error) {
-        if (axios.isCancel(error)) {
+        if (api.isCancel(error)) {
           console.log("Request canceled:", error.message);
         } else {
           console.error(error);

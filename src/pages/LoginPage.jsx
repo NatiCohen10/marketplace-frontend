@@ -4,8 +4,8 @@ import { Form, Link, useNavigate } from "react-router-dom";
 import FormLayout from "../components/ui/FormLayout";
 import FormInputWrapper from "../components/ui/FormInputWrapper";
 import CustomButton from "../components/ui/Button";
-import axios from "axios";
 import UserContext from "../contexts/UserContext";
+import api from "../services/api.service";
 
 function LoginPage() {
   const [userName, setUserName] = useState("");
@@ -21,10 +21,7 @@ function LoginPage() {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        newUser
-      );
+      const response = await api.post("/auth/login", newUser);
       localStorage.setItem("token", response.data.token);
 
       console.log("set item", response.data.token);

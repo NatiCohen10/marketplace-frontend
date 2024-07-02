@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import InputField from "./ui/InputField";
 import CustomChip from "./ui/CustomChip";
 import FormInputWrapper from "./ui/FormInputWrapper";
 import CustomButton from "./ui/Button";
 import UserContext from "../contexts/UserContext";
+import api from "../services/api.service";
 
 function CreateProduct(props) {
   const { setProducts, page, pagination, setPagination } = props;
@@ -27,7 +27,7 @@ function CreateProduct(props) {
     "Bags",
   ];
 
-  const productUrl = `http://localhost:3000/api/products`;
+  const productUrl = `/products`;
 
   async function handleFormSubmit(ev) {
     ev.preventDefault();
@@ -38,13 +38,8 @@ function CreateProduct(props) {
       categories: activeCategories,
     };
     try {
-      const response = await axios.post(productUrl, newProduct, {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const response = await api.post(productUrl, newProduct);
       const addedProduct = response.data.savedProduct;
-      const { userAddedWithoutPassword } = response.data;
 
       // const addedProduct = response.data;
 
@@ -59,7 +54,7 @@ function CreateProduct(props) {
           return prev;
         });
       }
-      setUser(userAddedWithoutPassword);
+
       setProductName("");
       setProductPrice("");
       setProductCategory("");

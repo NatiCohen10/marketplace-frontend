@@ -46,7 +46,7 @@ function FilterProducts(props) {
   function handleFilterByCategory(ev) {
     const categoryName = ev.target.name;
     const checked = ev.target.checked;
-    const category = searchParams.get("category");
+    const category = searchParams.get("categories");
 
     let updatedCategory = category ? category.split(",") : [];
 
@@ -61,9 +61,9 @@ function FilterProducts(props) {
     }
 
     if (updatedCategory.length > 0) {
-      searchParams.set("category", updatedCategory.join(","));
+      searchParams.set("categories", updatedCategory.join(","));
     } else {
-      searchParams.delete("category");
+      searchParams.delete("categories");
     }
 
     setSearchParams(searchParams);

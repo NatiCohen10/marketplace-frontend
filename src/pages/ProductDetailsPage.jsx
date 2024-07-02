@@ -1,10 +1,10 @@
-import axios from "axios";
 import { ArrowLeft, Pencil, Save, Trash } from "lucide-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomButton from "../components/ui/Button";
 import InputField from "../components/ui/InputField";
 import UserContext from "../contexts/UserContext";
+import api from "../services/api.service";
 
 function ProductDetailsPage() {
   const [product, setProduct] = useState(null);
@@ -14,14 +14,14 @@ function ProductDetailsPage() {
   const newTitleRef = useRef(null);
   const navigate = useNavigate();
   const { user, token } = useContext(UserContext);
-  console.log(user);
+  console.log(product);
 
-  const ProductUrl = `http://localhost:3000/api/products`;
+  const ProductUrl = `/products`;
 
   useEffect(() => {
     async function getProduct() {
       try {
-        const response = await axios.get(ProductUrl + "/" + productId);
+        const response = await api.get(ProductUrl + "/" + productId);
         setProduct(response.data);
         setEditedTitle(response.data.name);
       } catch (error) {
@@ -44,7 +44,7 @@ function ProductDetailsPage() {
   async function editTitle() {
     const newProductTitle = newTitleRef.current.value;
     try {
-      await axios.patch(ProductUrl + "/" + productId, {
+      await api.patch(ProductUrl + "/" + productId, {
         name: newProductTitle,
       });
       setProduct((prev) => {
@@ -58,7 +58,7 @@ function ProductDetailsPage() {
 
   function handleDeleteProduct(productId) {
     try {
-      axios.delete(ProductUrl + "/" + productId, {
+      api.delete(ProductUrl + "/" + productId, {
         headers: {
           Authorization: token,
         },
@@ -114,7 +114,7 @@ function ProductDetailsPage() {
           )}
           <div className=" flex flex-col gap-5">
             <p>Price: ${product.price}</p>
-            <p>Category: {product.category}</p>
+            <p>Category: {product.categories}</p>
             <p>Quantity: {product.quantity}</p>
           </div>
           <div className="flex justify-end">

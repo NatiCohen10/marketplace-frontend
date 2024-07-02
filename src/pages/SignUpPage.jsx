@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import FormInputWrapper from "../components/ui/FormInputWrapper";
 import { ArrowLeft } from "lucide-react";
 import CustomButton from "../components/ui/Button";
-import axios from "axios";
+import api from "../services/api.service";
 
 function SignUpPage() {
   const [userName, setUserName] = useState("");
@@ -25,7 +25,7 @@ function SignUpPage() {
 
     try {
       console.log(user);
-      await axios.post("http://localhost:3000/api/auth/register", user);
+      await api.post("/auth/register", user);
       // navigate("/login");
     } catch (error) {
       console.log(error);
